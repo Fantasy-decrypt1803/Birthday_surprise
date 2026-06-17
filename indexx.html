@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Daddy!</title>
+<style>
+  :root{--bg:#07070a;--ink:#ece7df;--accent:#c9a24a;--muted:#8a857c;--film:#d8d2c6;}
+  body{background:var(--bg);color:var(--ink);font-family:sans-serif;margin:0;overflow:hidden}
+  #setup{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(120% 90% at 50% 0%,#15151c 0%,var(--bg) 70%)}
+  .card{width:min(560px,100%);text-align:center}
+  h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(34px,7vw,52px);margin-bottom:20px}
+  h1 em{font-style:italic;color:var(--accent)}
+  .play{width:100%;padding:20px;border:none;border-radius:10px;cursor:pointer;background:var(--accent);color:#1a1407;font-weight:700;font-size:16px}
+  #theater{position:fixed;inset:0;background:#000;display:none}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity 1.6s;background-position:center;background-size:cover}
+  .slide.show{opacity:1}
+</style>
+</head>
+<body>
+
+<section id="setup">
+  <div class="card">
+    <h1>Happy Birthday to my wonderful <em>Daddy!</em></h1>
+    <button class="play" id="playBtn">Play the Surprise Reel</button>
+  </div>
+</section>
+
+<section id="theater">
+  <div id="stage"></div>
+  <audio id="audio"></audio>
+</section>
+
+<script>
+  (function(){
+    // UPDATE THESE FILENAMES to match your files on GitHub
+    const photos = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg']; 
+    const musicURL = 'birthday_song.mp3'; 
+    
+    const stage = document.querySelector('#stage');
+    const audio = document.querySelector('#audio');
+    
+    document.querySelector('#playBtn').onclick = () => {
+      document.querySelector('#setup').style.display='none';
+      document.querySelector('#theater').style.display='block';
+      
+      // Load photos
+      photos.forEach(url => {
+        const d = document.createElement('div');
+        d.className = 'slide';
+        d.style.backgroundImage = `url("${url}")`;
+        stage.appendChild(d);
+      });
+      
+      // Play audio
+      if(musicURL){
+        audio.src = musicURL;
+        audio.play().catch(e => console.log("Audio waiting for user interaction"));
+      }
+      
+      // Start show
+      const slides = document.querySelectorAll('.slide');
+      let i = 0;
+      slides[0].classList.add('show');
+      setInterval(() => {
+        slides[i].classList.remove('show');
+        i = (i + 1) % slides.length;
+        slides[i].classList.add('show');
+      }, 6000); // 6 seconds per photo
+    };
+  })();
+</script>
+</body>
+</html>
